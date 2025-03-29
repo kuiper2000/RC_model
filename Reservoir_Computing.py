@@ -8,7 +8,7 @@ class reservoir():
                  resSize = int, a = float, seed = int, 
                  reg=float):
     self.trainLen  = trainLen    # length for training
-    self.validLen  = validLen    # length for testing
+    self.validLen  = validLen    # length for validation
     self.initLen  = initLen      # length for initialization (spinup is necessaary to form the reservoir state)
     self.inSize   = inSize       # input variable dimension
     self.outSize  = outSize      # output variable dimension
