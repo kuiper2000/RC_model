@@ -9,13 +9,13 @@ class reservoir():
                  reg=float):
     self.trainLen  = trainLen    # length for training
     self.validLen  = validLen    # length for validation
-    self.initLen  = initLen      # length for initialization (spinup is necessaary to form the reservoir state)
-    self.inSize   = inSize       # input variable dimension
-    self.outSize  = outSize      # output variable dimension
-    self.resSize  = resSize      # reservoir size (how many past states are used)
-    self.a        = a            # leaking rate
-    self.seed     = seed         # experiment number (any number bigger than 0, if seed=0, randomly initialized)
-    self.reg      = reg          # regularization intensity (regid by default)
+    self.initLen   = initLen      # length for initialization (spinup is necessaary to form the reservoir state)
+    self.inSize    = inSize       # input variable dimension
+    self.outSize   = outSize      # output variable dimension
+    self.resSize   = resSize      # reservoir size (how many past states are used)
+    self.a         = a            # leaking rate
+    self.seed      = seed         # experiment number (any number bigger than 0, if seed=0, randomly initialized)
+    self.reg       = reg          # regularization intensity (regid by default)
 
 
   def training(self, data): # data should have a dimension of [time X variable]
