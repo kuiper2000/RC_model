@@ -4,18 +4,18 @@ import matplotlib.pyplot as plt
 
 
 class reservoir():
-  def __init__(self, trainLen=int, testLen=int, initLen=int, inSize=int, outSize = int,
+  def __init__(self, trainLen=int, validLen=int, initLen=int, inSize=int, outSize = int,
                  resSize = int, a = float, seed = int, 
                  reg=float):
-    self.trainLen = trainLen   # length for training
-    self.testLen  = testLen    # length for testing
-    self.initLen  = initLen    # length for initialization
-    self.inSize   = inSize     # input variable dimension
-    self.outSize  = outSize    # output variable dimension
-    self.resSize  = resSize    # reservoir size (how many past states are used)
-    self.a        = a          # leaking rate
-    self.seed     = seed       # experiment number (any number bigger than 0, if seed=0, randomly initialized)
-    self.reg      = reg        # regularization intensity (regid by default)
+    self.trainLen  = trainLen    # length for training
+    self.validLen  = validLen    # length for testing
+    self.initLen  = initLen      # length for initialization (spinup is necessaary to form the reservoir state)
+    self.inSize   = inSize       # input variable dimension
+    self.outSize  = outSize      # output variable dimension
+    self.resSize  = resSize      # reservoir size (how many past states are used)
+    self.a        = a            # leaking rate
+    self.seed     = seed         # experiment number (any number bigger than 0, if seed=0, randomly initialized)
+    self.reg      = reg          # regularization intensity (regid by default)
 
 
   def training(self, data): # data should have a dimension of [time X variable]
@@ -62,13 +62,13 @@ class reservoir():
 
     # run the trained ESN in a generative mode. no need to initialize here,
     # because x is initialized with training data and we continue from there. (all parameters are frozen)
-    Y        = np.zeros((self.outSize,self.testLen)) # the forecast value
+    Y        = np.zeros((self.outSize,self.validLen)) # the forecast value
     Y[:,0]   = data[self.trainLen,:]  
     u        = data[self.trainLen,:]                 # the input for steps at trainLen
     u        = np.reshape(u,[self.inSize,1])
     unit     = np.ones((1,1))
     x_record = x.copy()
-    for t in range(self.testLen-1):
+    for t in range(self.validLen-1):
         x        = (1-self.a)*x + self.a*np.tanh( np.dot( Win, np.vstack((unit,u)) ) + np.dot( W, x ) )
         y        = np.dot( Wout, np.vstack((1,u,x)) )
         Y[:,t+1] = np.squeeze(y)
@@ -80,7 +80,7 @@ class reservoir():
 
 
     # targeting specific lead 
-    errorLen = self.testLen
+    errorLen = self.validLen
     #print(data[self.trainLen+errorLen].shape)
     mse      = sum( np.square( data[self.trainLen:self.trainLen+errorLen] - np.transpose(Y[:,0:errorLen]) ) ) / errorLen
     
