@@ -56,7 +56,7 @@ class reservoir():
     #return all variables at t=trainLen
     return x, Win, W, Wout
 
-  def training_testing(self,data):
+  def training_validation(self,data):
     # training the model
     x, Win, W, Wout = self.training(data)
 
